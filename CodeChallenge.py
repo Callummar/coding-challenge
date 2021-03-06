@@ -9,11 +9,13 @@ def main():
     revenueFilter = [{"account_category":["revenue"]}]
     revenueData =  FilterData(revenueFilter,fileData)
     revenueTotal = CalcualteTotalValue(revenueData)
-
+    print("Revenue: " + FormatValue("money",revenueTotal))
     #Calculate Expenses
     expensesFilter = [{"account_category":["expense"]}]
     expensesData = FilterData(expensesFilter,fileData)
     expensesTotal = CalcualteTotalValue(expensesData)
+
+    print("Expenses: " + FormatValue("money",expensesTotal))
 
     #Calculate Gross Profit Margin
     gpmAccountFilter = [{"account_type":["sales"]}]
@@ -23,7 +25,11 @@ def main():
     gpmValueData = FilterData(gpmValueFilter,fileData)
 
     gpmPercent = (CalcualteTotalValue(gpmAccountData) + CalcualteTotalValue(gpmValueData)) / revenueTotal
+    print("Gross Profit Margin: " + FormatValue("percentage",gpmPercent))
+    
     #Calculate Net Profit Margin
+    npmValue = (revenueTotal - expensesTotal) / revenueTotal
+    print("Net Profit Margin: " + FormatValue("percentage",npmValue))
 
     #Calcuate Working Capital Ratio
     wcrAssetsDebitFilter = [{"account_category":["assets"]},
@@ -46,6 +52,10 @@ def main():
 
     wcrAssetsTotal = CalcualteTotalValue(wcrAssetsDebitData) - CalcualteTotalValue(wcrAssetsCreditData)
     wcrLiabilitiesTotal = CalcualteTotalValue(wcrLiabilitiesCreditData) - CalcualteTotalValue(wcrLiabilitiesDebitData)
+
+    wcrValue = (wcrAssetsTotal / wcrLiabilitiesTotal)
+
+    print("Working Capital Ratio: " + FormatValue("percentage",wcrValue))
 
 def ReadJsonFile(jsonFile):
     with open('data.json') as f:
@@ -76,5 +86,12 @@ def CalcualteTotalValue(dataList):
         except:
             totalValue += 0
     return totalValue
+
+def FormatValue(formatType,value):
+    if (formatType == "money"):
+        return  f"{value:,}"
+    elif (formatType == 'percentage'):
+        return "{:.1%}".format(value)
+
 
 main()
