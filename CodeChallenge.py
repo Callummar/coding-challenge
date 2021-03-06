@@ -89,7 +89,7 @@ def CalcualteTotalValue(dataList):
 
 def FormatValue(formatType,value):
     if (formatType == "money"):
-        return  f"{value:,}"
+        return  "$" + f"{value:,}"
     elif (formatType == 'percentage'):
         return "{:.1%}".format(value)
 
